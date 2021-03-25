@@ -377,6 +377,11 @@ class ScanConfig(object):
     def numAntenna(self):
         return len(self.listOfStations)
 
+    @property
+    def IFids(self):
+        """Return a list of IFis from the OBS XML."""
+        return [sslo.attrib["IFid"] for sslo in self.obs.sslo]
+
     def get_sslo(self, IFid):
         """Return the SSLO frequency in MHz for the given IFid.  This will
         correspond to the edge of the baseband.  Uses IFid naming convention

@@ -28,8 +28,8 @@ class SimpleController(evla_mcast.Controller):
         # system this could launch appropriate processing jobs, etc.
         # Here we just print some metadata from the ScanConfig object.
 
-        print("Observing source '%s' at (ra,dec)=(%.3f,%.3f) deg from MJD %.6f to %.6f" 
-                % (scan.source, scan.ra_deg, scan.dec_deg, scan.startTime, scan.stopTime)
+        print("Observing source '%s' at (ra,dec)=(%.3f,%.3f) deg from MJD %.6f to %.6f IFids=%s" 
+                % (scan.source, scan.ra_deg, scan.dec_deg, scan.startTime, scan.stopTime, str(scan.IFids))
             )
 
 c = SimpleController()
