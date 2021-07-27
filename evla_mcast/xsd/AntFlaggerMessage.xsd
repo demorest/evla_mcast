@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+    <xs:annotation>
+        <xs:documentation>
+        This schema describes a 'flag' element.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="flags">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="flag" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="flag">
+        <xs:complexType>
+            <xs:attribute name="startTime" type="xs:double" use="required" />
+            <xs:attribute name="endTime" type="xs:double" use="required" />
+            <xs:attribute name="reason" type="xs:string" use="required" />
+            <xs:attribute name="antennas" type="xs:string" use="optional" />
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
