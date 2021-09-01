@@ -11,8 +11,13 @@ _antflagger_xsd = os.path.join(_xsd_dir, 'AntFlaggerMessage.xsd')
 _antflagger_parser = objectify.makeparser(
         schema=etree.XMLSchema(file=_antflagger_xsd))
 
-_flaghost = 'mchammer.evla.nrao.edu'
-_antpath = 'evla-mcaf-production/dataset'
+# Production server
+#_flaghost = 'mchammer.evla.nrao.edu'
+#_antpath = 'evla-mcaf-production/dataset'
+
+# Test server
+_flaghost = 'mctest.evla.nrao.edu'
+_antpath = 'evla-mcaf-test/dataset'
 
 class FlagServer:
     def __init__(self, host=_flaghost, path=_antpath):
