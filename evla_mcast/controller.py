@@ -54,7 +54,11 @@ class Controller(object):
         ds = self.dataset(dsid)
 
         # Generate the scan config object for this scan
-        config = ScanConfig(obs=obs, vci=self.vci[cfgid],
+        try:
+            vci = self.vci[cfgid]
+        except KeyError:
+            vci = None
+        config = ScanConfig(obs=obs, vci=vci,
                             requires=self.scans_require)
 
         # Chek whether this is a subscan of an existing scan, add it if so
