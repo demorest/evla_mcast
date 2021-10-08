@@ -27,6 +27,8 @@ _vci_parser = objectify.makeparser(schema=etree.XMLSchema(file=_vci_xsd))
 _ant_xsd = os.path.join(_xsd_dir, 'observe', 'AntennaPropertyTable.xsd')
 _ant_parser = objectify.makeparser(schema=etree.XMLSchema(file=_ant_xsd))
 
+_delay_xsd = os.path.join(_xsd_dir, 'vci', 'vciStbDelayModel.xsd')
+_delay_parser = objectify.makeparser(schema=etree.XMLSchema(file=_delay_xsd))
 
 # Based on code originally in async_mcast.py by PD and S. Ransom
 #
@@ -93,8 +95,8 @@ class ObsClient(McastClient):
 
     def parse(self):
         obs = objectify.fromstring(self.read, parser=_obs_parser)
-        logger.info("Read obs configId={0}, seq={1}"
-                    .format(obs.attrib['configId'], obs.attrib['seq']))
+        logger.info("Read obs configId={0}, seq={1}, t={2}"
+                    .format(obs.attrib['configId'], obs.attrib['seq'], obs.attrib['startTime']))
         logger.debug('Obs data structure:\n' + objectify.dump(obs))
 
         if self.use_configUrl:
@@ -136,15 +138,52 @@ class AntClient(McastClient):
             self.controller.add_ant(result)
         logger.debug('Ant data structure:\n{0}'.format(objectify.dump(result)))
 
+class DelayClient(McastClient):
+    """Recieves EVLA delay model XML for a single StB.
+    
+    Will call the controller.add_delay() method when received.
+    """
+
+    # There are 128 ports in use for the different antenna/IFs
+    # port number = 53500 + ant_num*4 + if_num
+    # ant_num is the "ea" number; (0 is unused)
+    # if_num (0,1,2,3) == (A,C,B,D)
+    # for 3-bit 0=A1C1, 1=B1D1, 2=A2C2, 3=B2D2
+
+    def __init__(self, antenna, ifid, controller=None):
+        try:
+            antenna = antenna.lstrip('ea')
+        except AttributeError:
+            # not a string
+            pass
+        ant_id = int(antenna)
+        # ifif accept strings?  will anyone use it?
+        port = 53500 + 4*ant_id + ifid
+        McastClient.__init__(self, '239.192.3.5', port, 'del')
+        self.controller = controller
+
+    def parse(self):
+        result = objectify.fromstring(self.read, parser=_delay_parser)
+        # maybe this should be debug?
+        logger.info("Read delay model idString={0} seq={1} t0={2}"
+                .format(result.attrib['idString'], result.attrib['sequenceNum'], result.attrib['t0']))
+
+        if self.controller is not None:
+            self.controller.add_delay(result)
+
+        logger.debug('Delay data structure:\n{0}'.format(objectify.dump(result)))
+
+# TODO make a class that handles all 128 delay connections
 
 # This is how these would be used in a program.  Note that no controller
 # is passed, so the only action taken here is to print log messages when
 # each XML document comes in.
 if __name__ == '__main__':
-    logger.basicConfig(format="%(asctime)-15s %(levelname)8s %(message)s",
-                       level=logger.DEBUG)
+    logging.basicConfig(format="%(asctime)-15s %(levelname)8s %(message)s",
+                       level=logging.DEBUG)
     ant_client = AntClient()
     obs_client = ObsClient()
+    del_client = DelayClient('ea01',0)
     try:
         asyncore.loop()
     except KeyboardInterrupt:
