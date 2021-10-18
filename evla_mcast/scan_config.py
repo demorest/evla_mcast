@@ -371,7 +371,12 @@ class ScanConfig(object):
 
     @property
     def listOfStations(self):
-        return [str(s.attrib["name"]) for s in self.vci.listOfStations.station]
+        if self.has_vci:
+            return [str(s.attrib["name"]) for s in self.vci.listOfStations.station]
+        elif self.has_ant:
+            return [str(s.attrib["name"]) for s in self.ant.AntennaProperties]
+        else:
+            return []
 
     @property
     def numAntenna(self):
