@@ -7,7 +7,7 @@
 from setuptools import setup, find_packages
 
 setup(name='evla_mcast',
-      version='0.3.2',
+      version='0.3.3',
       description='Receive and handle EVLA multicast messages',
       author='Paul Demorest',
       author_email='pdemores@nrao.edu',
