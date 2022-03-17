@@ -150,14 +150,26 @@ class DelayClient(McastClient):
     # if_num (0,1,2,3) == (A,C,B,D)
     # for 3-bit 0=A1C1, 1=B1D1, 2=A2C2, 3=B2D2
 
+    # Map IF number to IF letter codes
+    if_codes = ['A', 'C', 'B', 'D']
+
     def __init__(self, antenna, ifid, controller=None):
+
         try:
             antenna = antenna.lstrip('ea')
         except AttributeError:
             # not a string
             pass
         ant_id = int(antenna)
-        # ifif accept strings?  will anyone use it?
+
+        try:
+            ifid = self.if_codes.index(ifid)
+        except ValueError:
+            # Not in list
+            pass
+        ifid = int(ifid)
+
+        self.ifid =  'ea%02d%s' % (ant_id, self.if_codes[ifid])
         port = 53500 + 4*ant_id + ifid
         McastClient.__init__(self, '239.192.3.5', port, 'del')
         self.controller = controller
@@ -173,7 +185,14 @@ class DelayClient(McastClient):
 
         logger.debug('Delay data structure:\n{0}'.format(objectify.dump(result)))
 
-# TODO make a class that handles all 128 delay connections
+def all_delay_clients(controller=None):
+    """Convenience function to instantiate all 28*4=112 delay model clients
+    (one per antenna/IF).  Returns a list of the client objects."""
+    result = []
+    for iant in range(1,29):
+        for iif in range(4):
+            result.append(DelayClient(iant,iif,controller=controller))
+    return result
 
 # This is how these would be used in a program.  Note that no controller
 # is passed, so the only action taken here is to print log messages when
@@ -183,7 +202,7 @@ if __name__ == '__main__':
                        level=logging.DEBUG)
     ant_client = AntClient()
     obs_client = ObsClient()
-    del_client = DelayClient('ea01',0)
+    del_clients = all_delay_clients()
     try:
         asyncore.loop()
     except KeyboardInterrupt:

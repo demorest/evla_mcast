@@ -26,9 +26,13 @@ class Dataset(object):
 
 class Controller(object):
 
-    def __init__(self):
+    def __init__(self,delays=False):
         self.obs_client = mcast_clients.ObsClient(self)
         self.ant_client = mcast_clients.AntClient(self)
+        if delays:
+            self.delay_clients = mcast_clients.all_delay_clients()
+        else:
+            self.delay_clients = None
         self._datasets = {}  # key is datasetId
         self.vci = {}       # key is configId
 
@@ -136,6 +140,13 @@ class Controller(object):
                 scan.set_ant(ant)
         # Handle any now-complete scans in the queue
         self.clean_queue(ds)
+
+    def add_delay(self, delay):
+        # TODO implement this.  delay models do not have a dataset ID so
+        # if we want the info to appear in ScanConfig need to go through
+        # the whole list of not-finished scans and add the models as
+        # appropriate
+        pass
 
     def clean_queue(self, ds):
         # Calls handle_config on any queued scans that now have complete
