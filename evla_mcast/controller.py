@@ -30,7 +30,7 @@ class Controller(object):
         self.obs_client = mcast_clients.ObsClient(self)
         self.ant_client = mcast_clients.AntClient(self)
         if delays:
-            self.delay_clients = mcast_clients.all_delay_clients()
+            self.delay_clients = mcast_clients.all_delay_clients(self)
         else:
             self.delay_clients = None
         self._datasets = {}  # key is datasetId
