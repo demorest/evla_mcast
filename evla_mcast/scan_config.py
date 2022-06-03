@@ -394,7 +394,7 @@ class ScanConfig(object):
 
         for sslo in self.obs.sslo:
             if sslo.attrib["IFid"] == IFid:
-                return sslo.freq  # These are in MHz
+                return float(sslo.freq) # These (xml FloatElement) are in MHz
         return None
 
     def get_sideband(self, IFid):
