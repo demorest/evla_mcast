@@ -88,8 +88,8 @@ class ObsClient(McastClient):
     be called if a controller exists.
     """
 
-    def __init__(self, controller=None, use_configUrl=True):
-        McastClient.__init__(self, '239.192.3.2', 53001, 'obs')
+    def __init__(self, controller=None, use_configUrl=True, group='239.192.3.2', port=53001):
+        McastClient.__init__(self, group, port, 'obs')
         self.controller = controller
         self.use_configUrl = use_configUrl
 
@@ -125,8 +125,8 @@ class AntClient(McastClient):
     be called for every document received.
     """
 
-    def __init__(self, controller=None):
-        McastClient.__init__(self, '239.192.3.1', 53000, 'ant')
+    def __init__(self, controller=None, group='239.192.3.1', port=53000):
+        McastClient.__init__(self, group, port, 'ant')
         self.controller = controller
 
     def parse(self):
@@ -153,7 +153,7 @@ class DelayClient(McastClient):
     # Map IF number to IF letter codes
     if_codes = ['A', 'C', 'B', 'D']
 
-    def __init__(self, antenna, ifid, controller=None):
+    def __init__(self, antenna, ifid, controller=None, group='239.192.3.5', baseport=53500):
 
         try:
             antenna = antenna.lstrip('ea')
@@ -170,8 +170,8 @@ class DelayClient(McastClient):
         ifid = int(ifid)
 
         self.ifid =  'ea%02d%s' % (ant_id, self.if_codes[ifid])
-        port = 53500 + 4*ant_id + ifid
-        McastClient.__init__(self, '239.192.3.5', port, 'del')
+        port = baseport + 4*ant_id + ifid
+        McastClient.__init__(self, group, port, 'del')
         self.controller = controller
 
     def parse(self):
