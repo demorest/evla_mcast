@@ -26,13 +26,23 @@ class Dataset(object):
 
 class Controller(object):
 
-    def __init__(self,delays=False):
-        self.obs_client = mcast_clients.ObsClient(self)
-        self.ant_client = mcast_clients.AntClient(self)
+    def __init__(self,delays=False,obs_group=None,ant_group=None):
+
+        if obs_group is not None:
+            self.obs_client = mcast_clients.ObsClient(self,group=obs_group)
+        else:
+            self.obs_client = mcast_clients.ObsClient(self)
+
+        if ant_group is not None:
+            self.ant_client = mcast_clients.AntClient(self,group=ant_group)
+        else:
+            self.ant_client = mcast_clients.AntClient(self)
+
         if delays:
             self.delay_clients = mcast_clients.all_delay_clients(self)
         else:
             self.delay_clients = None
+
         self._datasets = {}  # key is datasetId
         self.vci = {}       # key is configId
 
