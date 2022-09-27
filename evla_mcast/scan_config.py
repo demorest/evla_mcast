@@ -351,7 +351,7 @@ class ScanConfig(object):
         for baseBand in self.vci.stationInputOutput[0].baseBand:
             try:
                 if baseBand.binningPeriod is not None:
-                    IFid = swbbName_to_IFid(baseBand.swbbName)
+                    IFid = self.swbbName_to_IFid(baseBand.swbbName)
                     bp[IFid] = baseBand.binningPeriod
             except AttributeError:
                 pass
