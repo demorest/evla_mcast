@@ -10,7 +10,7 @@
         <xs:element name="dra" type="xs:double" minOccurs="0"/>
         <xs:element name="ddec" type="xs:double" minOccurs="0"/>
 
-	<xs:element name="ephemeris" minOccurs="0" >
+	<xs:element name="ephemeris" minoccurs="0" >
 	  <xs:complexType>
 	    <xs:sequence>
 	      <xs:element name="referenceTime" type="xs:double" />
@@ -39,13 +39,12 @@
             <xs:attribute name="Receiver" type="xs:string" />
             <xs:attribute name="IFid" type="xs:string" />
             <xs:attribute name="Sideband" type="xs:int" />
-            <xs:attribute name="SolarCal" type="xs:int" use="optional"/>
+            <xs:attribute name="SolarCal" type="xs:int" usage="optional"/>
+            <xs:attribute name="Bandwidth" type="xs:double" usage="optional"/>
           </xs:complexType>
 	</xs:element>
       </xs:sequence>
       <xs:attribute name="subarrayId" type="xs:string" />
-      <!-- datasetID will be removed once all of the users have switched to datasetId -->
-      <xs:attribute name="datasetID" type="xs:string" use="optional" />
       <xs:attribute name="datasetId" type="xs:string" use="optional" />
       <xs:attribute name="startTime" type="xs:double" />
       <xs:attribute name="seq" type="xs:int" use="optional" />
@@ -55,7 +54,6 @@
   </xs:element>
 
   <xs:complexType name="polyType" >
-    <xs:sequence>
     <xs:element name="coeff" maxOccurs="unbounded">
        <xs:complexType>
 	<xs:simpleContent>
@@ -65,7 +63,6 @@
 	</xs:simpleContent>
       </xs:complexType>
     </xs:element>
-    </xs:sequence>
   </xs:complexType>
 
 </xs:schema>

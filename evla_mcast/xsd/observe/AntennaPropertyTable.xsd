@@ -16,6 +16,7 @@
 	  <xs:element name="Y" type="xs:double"/>
 	  <xs:element name="Z" type="xs:double"/>
 	  <xs:element name="offset" type="xs:double"/>
+	  <xs:element name="diameter" type="xs:double" minOccurs="0"/>
 	  </xs:sequence>
 	<xs:attribute name="name" type="xs:string"/>
 	</xs:complexType>
