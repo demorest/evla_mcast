@@ -118,6 +118,7 @@ class Controller(object):
             ds.queued.append(config)
             logging.debug('Queued scan {0}, scan {1}.'
                           .format(config.scan_intent, config.scanId))
+            self.handle_queued_config(config)
 
         # Handle any complete scans from queue
         self.clean_queue(ds)
@@ -178,6 +179,12 @@ class Controller(object):
             logging.debug('handled %s start=%.6f stop=%.6f' % (
                 s.scanId, s.startTime,
                 s.stopTime if s.stopTime is not None else 0.0))
+
+    def handle_queued_config(self, config):
+        # Implement in derived class.  This will be called with the
+        # ScanConfig object as argument every time a non-subscan scan
+        # is queued within the dataset.
+        pass
 
     def handle_config(self, config):
         # Implement in derived class.  This will be called with the
