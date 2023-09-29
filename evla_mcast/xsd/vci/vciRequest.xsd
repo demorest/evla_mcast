@@ -449,7 +449,9 @@
 				</xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="rfiDetectionLevel" type="xs:decimal" use="optional"/>
-			<xs:attribute name="rfiBlankingDuration" type="xs:decimal" use="optional"/>
+			<!--Again work around the excessive zero-padding-->
+			<!--<xs:attribute name="rfiBlankingDuration" type="xs:decimal" use="optional"/>-->
+			<xs:attribute name="rfiBlankingDuration" type="xs:string" use="optional"/>
 			<xs:attribute name="frameSchedulingAlgorithm" type="widar:InterFrameDelayAlgType" use="optional"/>
 			<xs:attribute name="interFrameDelay" type="widar:SfpFrameDelayType" use="optional"/>
 			<xs:attribute name="randomizeDelay" type="widar:OnOffType" use="optional"/>
